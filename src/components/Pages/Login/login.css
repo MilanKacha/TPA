@@ -1,0 +1,33 @@
+.carousel-icon {
+  display: inline-block;
+  animation: moveCarousel 10s linear infinite;
+  border: 1px solid red;
+}
+
+@keyframes moveCarousel {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+}
+.form-box {
+  width: 380px;
+  height: 450px;
+  background-color: black;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  opacity: 0.75;
+  border-radius: 2%;
+}

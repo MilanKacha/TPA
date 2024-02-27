@@ -1,0 +1,62 @@
+.Sidebar {
+  width: 200px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: -200px;
+  background-color: #fff;
+  transition: left 0.3s ease;
+}
+
+.Sidebar.open {
+  left: 0;
+}
+
+.toggleButton {
+  cursor: pointer;
+  padding: 10px;
+}
+
+.menuItems {
+  padding-top: 50px;
+}
+
+.menuItem {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.menuItem:hover {
+  background-color: #f0f0f0;
+}
+
+.menuItem.active {
+  background-color: #e0e0e0;
+}
+
+.submenu {
+  padding-left: 20px;
+  display: none;
+}
+
+.submenu a {
+  display: block;
+  padding: 5px 0;
+}
+
+.Sidebar.open .submenu {
+  display: block;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
