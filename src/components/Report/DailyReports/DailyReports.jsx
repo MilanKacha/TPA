@@ -11,7 +11,7 @@ import ExcleFileUplodeModal from "../../Modal/ExcleFileUplodeModal";
 import { ImListNumbered } from "react-icons/im";
 import * as XLSX from "xlsx";
 
-const Home = ({ mode }) => {
+const DailyReports = ({ mode }) => {
   const [selectedCustomerName, setSelectedCustomerName] = useState("All");
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedDateCount, setSelectedDateCount] = useState("");
@@ -25,7 +25,7 @@ const Home = ({ mode }) => {
   // console.log(dateCount);
 
   const [tpaData, setTpaData] = useState(null);
-  console.log(tpaData);
+  // console.log(tpaData);
 
   const [countData, setCountData] = useState(null);
   const [currentPageCusAmount, setCurrentPageCusAmount] = useState(1);
@@ -52,16 +52,17 @@ const Home = ({ mode }) => {
     async function fetchData() {
       try {
         const response = await fetch(
-          "http://172.21.10.11:4890/kbh/DashboardData"
+          "http://172.21.10.11:4890/kbh/DailyDashboardData"
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        setTpaData(data.M2);
-        setCountData(data.M1);
-        setTop(data.Top5);
-        setBottom(data.Low5);
+        console.log(data)
+        setTpaData(data.M21);
+        setCountData(data.M11);
+        setTop(data.Top51);
+        setBottom(data.Low51);
         setDateCount(data.DWReport);
         setFilteredData(data.DWReport);
         const allData = data.M1.find((item) => item.CustName === "All");
@@ -87,6 +88,14 @@ const Home = ({ mode }) => {
     return inputDateFormat.format("DD-MM-YYYY");
   };
 
+  const convertDateFormatPro = (inputDate) => {
+    const inputDateFormat = moment(inputDate, "DD-MM-YYYY HH:mm:ss", true);
+    if (!inputDateFormat.isValid()) {
+      return "Invalid date";
+    }
+    return inputDateFormat.format("DD-MM-YYYY");
+  };
+
   const handleChange = (event) => {
     const selectedCustomer = event.target.value;
     setSelectedCustomerName(selectedCustomer);
@@ -103,25 +112,25 @@ const Home = ({ mode }) => {
     }
   };
 
-  function convertToAspNetDate(dateString) {
-    // Parse the date string into a JavaScript Date object
-    const date = new Date(dateString);
+  // function convertToAspNetDate(dateString) {
+  //   // Parse the date string into a JavaScript Date object
+  //   const date = new Date(dateString);
 
-    // Set the time part of the date to represent the start of the day (midnight)
-    date.setHours(0, 0, 0, 0);
+  //   // Set the time part of the date to represent the start of the day (midnight)
+  //   date.setHours(0, 0, 0, 0);
 
-    // Get the milliseconds since the Unix epoch
-    const milliseconds = date.getTime();
+  //   // Get the milliseconds since the Unix epoch
+  //   const milliseconds = date.getTime();
 
-    // Format the milliseconds into the ASP.NET date format
-    const aspNetDate = `/Date(${milliseconds})/`;
+  //   // Format the milliseconds into the ASP.NET date format
+  //   const aspNetDate = `/Date(${milliseconds})/`;
 
-    return aspNetDate;
-  }
+  //   return aspNetDate;
+  // }
 
-  // const handleDateChange = (event) => {
-  //   setSelectedDate(event.target.value);
-  // };
+  const handleDateChange = (event) => {
+    setSelectedDate(event.target.value);
+  };
   // console.log(convertToAspNetDate(selectedDate));
   // console.log(selectedDate);
   // const filteredTpaData =
@@ -140,8 +149,8 @@ const Home = ({ mode }) => {
           }
 
           if (
-            selectedDate &&
-            tpa.ProcessedDate !== convertToAspNetDate(selectedDate)
+            selectedDate && convertDateFormatPro(tpa.ProcessedDate) !== convertDateFormat(selectedDate)
+            
           ) {
             return false;
           }
@@ -150,9 +159,9 @@ const Home = ({ mode }) => {
         })
       : [];
 
-  const handleDateChangeCountDate = (event) => {
-    setSelectedDateCount(event.target.value);
-  };
+  // const handleDateChangeCountDate = (event) => {
+  //   setSelectedDateCount(event.target.value);
+  // };
 
   // table 2 date
   // const filterCountData =
@@ -165,21 +174,21 @@ const Home = ({ mode }) => {
 
   // console.log(convertDateFormat(selectedDateCount));
 
-  const filterData = () => {
-    if (!selectedDateCount) {
-      setFilteredData(dateCount); // Display entire data when no date is selected
-      return;
-    }
+  // const filterData = () => {
+  //   if (!selectedDateCount) {
+  //     setFilteredData(dateCount); // Display entire data when no date is selected
+  //     return;
+  //   }
 
-    const filteredData =
-      dateCount &&
-      (selectedDateCount
-        ? dateCount.filter((el) => {
-            return el.Date == convertDateFormat(selectedDateCount);
-          })
-        : dateCount);
-    setFilteredData(filteredData);
-  };
+  //   const filteredData =
+  //     dateCount &&
+  //     (selectedDateCount
+  //       ? dateCount.filter((el) => {
+  //           return el.Date == convertDateFormat(selectedDateCount);
+  //         })
+  //       : dateCount);
+  //   setFilteredData(filteredData);
+  // };
 
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -219,17 +228,17 @@ const Home = ({ mode }) => {
     endIndexDateCount
   );
 
-  const handleNextPageDateCount = () => {
-    if (currentPageDateCount < totalPagesDateCount) {
-      setCurrentPageDateCount(currentPageDateCount + 1);
-    }
-  };
+  // const handleNextPageDateCount = () => {
+  //   if (currentPageDateCount < totalPagesDateCount) {
+  //     setCurrentPageDateCount(currentPageDateCount + 1);
+  //   }
+  // };
 
-  const handlePrevPageDateCount = () => {
-    if (currentPageDateCount > 1) {
-      setCurrentPageDateCount(currentPageDateCount - 1);
-    }
-  };
+  // const handlePrevPageDateCount = () => {
+  //   if (currentPageDateCount > 1) {
+  //     setCurrentPageDateCount(currentPageDateCount - 1);
+  //   }
+  // };
 
   // pagination Custemer amount pending sort
 
@@ -259,7 +268,7 @@ const Home = ({ mode }) => {
   const totalPagesCusAmount = Math.ceil(
     sortedItems?.length / itemsPerPageCusAmount
   );
-
+// console.log(selectedDate)
   const startIndexCusAmount =
     (currentPageCusAmount - 1) * itemsPerPageCusAmount;
   const endIndexCusAmount = startIndexCusAmount + itemsPerPageCusAmount;
@@ -295,15 +304,15 @@ const Home = ({ mode }) => {
   //   return `${day}-${month}-${year}`;
   // }
 
-  const filterDataExport = () => {
-    const filtered = selectedDateCount
-      ? tpaData.filter(
-          (item) => item.ProcessedDate == convertDateFormat(selectedDateCount)
-        )
-      : tpaData;
-    exportToExcel(filtered);
-    console.log(selectedDateCount);
-  };
+  // const filterDataExport = () => {
+  //   const filtered = selectedDateCount
+  //     ? tpaData.filter(
+  //         (item) => item.ProcessedDate == convertDateFormat(selectedDateCount)
+  //       )
+  //     : tpaData;
+  //   exportToExcel(filtered);
+  //   console.log(selectedDateCount);
+  // };
 
   const exportToExcel = (tableData) => {
     if (!tableData || tableData.length === 0) {
@@ -320,9 +329,9 @@ const Home = ({ mode }) => {
 
   return (
     <>
-      <div className="overflow-auto h-[100vh] mx-auto ">
+       <div className={`overflow-auto h-[100vh] mx-auto ${mode ? "text-[#000]" : "text-[#c2c2c2]"}`} >
         <motion.h3
-          className="flex justify-start pl-6 items-center bg-[#E3EDFF] h-[8vh] fixed w-full  z-50 "
+          className={"flex justify-start pl-6 items-center bg-transparent h-[8vh] w-full  z-50"}
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1 }}
@@ -338,17 +347,48 @@ const Home = ({ mode }) => {
           </div>
         </motion.h3>
         <ExcleFileUplodeModal isOpen={modalIsOpen} onClose={onCloseModal} />
+       
+        <div className="flex justify-evenly h-[6rem] mt-[4vh]">
+          <button className={`font-medium rounded-xl w-[14rem] `}>
+            <span className= {`${mode ? "text-[#000]" : "text-[#c2c2c2]"} text-[2rem]`}>Pending</span>
+            <br />
+            {/* <span className="text-blue-600">{Math.abs(pendingAmount)}</span> */}
+            <span className="text-blue-600 text-[2rem]">₹85,78,88,981.3</span>
+          </button>
+          <button className={`font-medium rounded-xl w-[14rem]`}>
+          <span className= {`${mode ? "text-[#000]" : "text-[#c2c2c2]"} text-[2rem]`}>Count</span>
+            <br />
+            {/* <span className="text-green-600"> {count}</span> */}
+            <span className="text-green-600 text-[30px]">4040</span>
+          </button>
+          <button className={`font-medium rounded-xl w-[14rem]`}>
+          <span className= {`${mode ? "text-[#000]" : "text-[#c2c2c2]"} text-[2rem]`}>Processed
+</span>
+            <br />
+            <span className="text-red-600 text-[30px]">3000</span>
+          </button>
+          <button className={`font-medium rounded-xl w-[14rem] `}>
+          <span className= {`${mode ? "text-[#000]" : "text-[#c2c2c2]"} text-[2rem]`}>UnProcessed</span>
+            <br />
+            <span className="text-[#e707dc] text-[30px]">1000</span>
+          </button>
+          <button className={`font-medium rounded-xl w-[14rem] `}>
+          <span className= {`${mode ? "text-[#000]" : "text-[#c2c2c2]"} text-[2rem]`}>Exception</span>
+            <br />
+            <span className="text-[#A855F7] text-[30px]">40</span>
+          </button>
+        </div>
         <motion.div
-          className="flex flex-col md:flex-row mt-[10vh] w-[80vw] mx-auto"
+          className="flex flex-col md:flex-row mt-[4vh] w-[80vw] mx-auto "
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1 }}
         >
-          <div className="pr-2 flex items-center text-[15px] w-[70%]">
-            {/* <div className="w-[80%]">
+          
+          <div className="pr-2 flex items-center text-[15px]  w-[90%]">
+            <div className="w-[60%]">
               <select
-                className="border border-gray-100  bg-[#E3EDFF] rounded-[2px] px-3 py-1 focus:outline-none focus:border-blue-500 mr-2 w-full"
-                value={selectedCustomerName}
+                className={`rounded-[2px] px-3 py-1 focus:outline-none focus:border-blue-500 mr-2 w-full ${mode ? 'bg-[#ffffff]' : 'bg-[#303053]'}`}
                 onChange={handleChange}
               >
                 {countData?.map((item, index) => (
@@ -361,13 +401,15 @@ const Home = ({ mode }) => {
                   </option>
                 ))}
               </select>
-            </div> */}
+            </div>
             <div>
               <input
                 type="date"
-                className="border border-gray-300 rounded-[2px] px-3 py-1 focus:outline-none focus:border-blue-500 ml-2"
-                // value={selectedDate}
-                // onChange={handleDateChange}
+                className={`rounded-[2px] px-3 py-1 ml-3 focus:outline-none focus:border-blue-500 ${
+                  mode ? "bg-[#dee4ff]" : "bg-[#303053]"
+                }`}
+                value={selectedDate}
+                onChange={handleDateChange}
               />
             </div>
             <div
@@ -377,115 +419,119 @@ const Home = ({ mode }) => {
               Export DATA
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-2 w-[30%]">
-            <motion.div
+          {/* <div className="grid grid-cols-2 gap-2 w-[30%]"> */}
+            {/* <motion.div
               // initial={{ rotate: "0deg" }}
               // animate={{ rotate: "360deg" }}
               // transition={{ duration: 1 }}
               className={`flex gap-2 justify-center items-center ${
                 mode ? "bg-[#ffffff]" : "bg-[#ffffff]"
               } py-[2px] px-[20px] border-gray-300 shadow-lg `}
-            >
+            > */}
               {/* <div className=" p-2 bg-yellow-500  rounder-[5px]">
                 <span>
                   <FaRupeeSign size={25} className="text-white" />
                 </span>
               </div> */}
-              <div className="flex flex-col ">
+              {/* <div className="flex flex-col ">
                 <span className="text-black text-center font-medium text-[25px]">
                   Pending
                 </span>
                 <span className="text-black flex justify-center font-semibold text-[20px]">
                   {Math.abs(pendingAmount)}
                 </span>
-              </div>
-            </motion.div>
-            <div
+              </div> */}
+            {/* </motion.div> */}
+            {/* <div
               className={`flex gap-2 justify-center items-center  ${
                 mode ? "bg-[#ffffff]" : "bg-[#ffffff]"
               } py-[2px] px-[20px] border-gray-300 shadow-lg  `}
-            >
+            > */}
               {/* <div>
                 <span>
                   <ImListNumbered size={32} className="text-yellow-300" />
                 </span>
               </div> */}
-              <div className="flex flex-col ">
+              {/* <div className="flex flex-col ">
                 <span className="text-black text-center font-medium text-[25px]">
                   Count
                 </span>
                 <span className="text-black flex justify-center font-semibold text-[20px]">
                   {count}
                 </span>
-              </div>
-            </div>
-          </div>
+              </div> */}
+            {/* </div> */}
+          {/* </div> */}
         </motion.div>
         <div className="flex flex-col mt-3 mx-3">
           <motion.div
-            className="h-[60vh] overflow-auto border w-[80vw] max-w-[100vw] mx-auto"
+            className="h-[60vh] overflow-auto w-[80vw] max-w-[100vw] mx-auto"
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1 }}
           >
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className={`${mode ? "" : "text-black"} sticky top-0`}>
-                  <tr
-                    className={`text-[0.9rem] ${
-                      mode ? "#e6e6e6" : "bg-[#dee4ff]"
-                    }  `}
-                  >
-                    <th className="py-1 text-center whitespace-nowrap px-[5px]">
+              <thead className={`${mode ? "text-black" : "text-[#fff]"} sticky top-0`}>
+                <tr
+                  className={`text-[0.9rem] ${
+                    mode ? "bg-[#dee4ff]" : "bg-[#29295e]"
+                  } `}
+                >
+                    <th className="py-1 text-center whitespace-nowrap px-[20px]">
                       Sl No
                     </th>
-                    <th className="py-1 text-center whitespace-nowrap px-[5px]">
-                      Line item
-                    </th>
-                    <th className="py-1 text-center whitespace-nowrap px-[5px]">
-                      Account
-                    </th>
-                    <th className="py-1 text-center whitespace-nowrap px-[5px]">
+                    <th className="py-1 text-center whitespace-nowrap px-[20px]">
                       Customer Name
                     </th>
-                    <th className="py-1 text-center whitespace-nowrap px-[5px]">
+                    <th className="py-1 text-center whitespace-nowrap px-[20px]">
+                      Line item
+                    </th>
+                    <th className="py-1 text-center whitespace-nowrap px-[20px]">
+                      Account
+                    </th>
+                   
+                    <th className="py-1 text-center whitespace-nowrap px-[20px]">
                       Document No
                     </th>
-                    <th className="py-1 text-center whitespace-nowrap px-[5px]">
+                    <th className="py-1 text-center whitespace-nowrap px-[20px]">
                       Document type
                     </th>
-                    <th className="py-1 text-center whitespace-nowrap px-[5px]">
+                    <th className="py-1 text-center whitespace-nowrap px-[20px]">
                       Amount(₹)
                     </th>
-                    <th className="py-1 text-center whitespace-nowrap px-[5px]">
+                    <th className="py-1 text-center whitespace-nowrap px-[20px]">
+                      Pro.Date
+                    </th>
+                    <th className="py-1 text-center whitespace-nowrap px-[20px]">
                       Document Date
                     </th>
-                    <th className="p-1 text-center whitespace-nowrap px-[5px]">
+                    <th className="p-1 text-center whitespace-nowrap px-[20px]">
                       Posting Date
                     </th>
-                    <th className="p-1 text-center whitespace-nowrap px-[5px]">
+                    <th className="p-1 text-center whitespace-nowrap px-[20px]">
                       Entry Date
                     </th>
-                    <th className="p-1 text-center whitespace-nowrap px-[5px]">
+                    <th className="p-1 text-center whitespace-nowrap px-[20px]">
                       TPAID - Location
                     </th>
-                    <th className="p-1 text-center whitespace-nowrap px-[5px]">
+                    <th className="p-1 text-center whitespace-nowrap px-[20px]">
                       Contact Person Name & No
                     </th>
-                    <th className="p-1 text-center">Security Deposit</th>
-                    <th className="p-1 text-center">Short paid remarks</th>
-                    <th className="p-1 text-center">Document Header Text</th>
-                    <th className="p-1 text-center">Text</th>
+                    <th className="p-1 text-center whitespace-nowrap px-[20px]">Security Deposit</th>
+                    <th className="p-1 text-center whitespace-nowrap px-[20px]">Short paid remarks</th>
+                    <th className="p-1 text-center whitespace-nowrap px-[20px]">Document Header Text</th>
+                    <th className="p-1 text-center whitespace-nowrap px-[20px]">Text</th>
                   </tr>
                 </thead>
                 <tbody className="bg-[#fff]">
                   {currentItems?.map((tpa, index) => (
-                    <tr
-                      key={index}
-                      className={`text-center text-[0.8rem] ${
-                        index % 2 !== 0 ? "bg-blue-100" : "bg-white"
-                      } ${mode ? "text-black" : "text-black"}`}
-                    >
+                   <tr
+                   key={index}
+                   className={`text-center text-[0.8rem] ${ mode ?
+                     index % 2 !== 0 ? "bg-blue-100" : "bg-white" :  index % 2 !== 0 ? "bg-[#303053]" : "bg-[#303053]" 
+                   } ${mode ? "text-black" : "text-white"}`}
+                 >
                       <td className="border-x-0 py-1 whitespace-nowrap">
                         {`${
                           currentPage * itemsPerPage -
@@ -495,7 +541,7 @@ const Home = ({ mode }) => {
                       </td>
                       <td className="border-x-0 py-1 whitespace-nowrap">
                         {tpa?.CustomerName > 30
-                          ? tpa.CustomerName.substring(0, 50) + "..."
+                          ? tpa.CustomerName?.substring(0, 50) + "..."
                           : tpa.CustomerName}
                       </td>
                       <td
@@ -503,98 +549,106 @@ const Home = ({ mode }) => {
                           mode ? "border-y-slate-300" : "border-gray-300  "
                         }`}
                       >
-                        {tpa?.RefN}
+                        {tpa?.lineItem}
+                      </td>
+                      <td
+                        className={` border-x-0 py-1 whitespace-nowrap ${
+                          mode ? "border-y-slate-300" : "border-gray-300"
+                        }`}
+                      >
+                        {tpa?.AccNum}
+                      </td>
+                      <td
+                        className={` border-x-0 py-1 whitespace-nowrap ${
+                          mode ? "border-y-slate-300" : "border-gray-300"
+                        }`}
+                      >
+                        {tpa?.DocumentNumber}
                       </td>
                       <td
                         className={` border-x-0 py-1 whitespace-nowrap ${
                           mode ? "border-y-slate-300" : "border-gray-300  "
                         }`}
                       >
-                        {tpa?.Assignment}
+                           {tpa?.Document_type}
+                        {/* {`${Math.abs(tpa?.Amount)}`} */}
                       </td>
                       <td
                         className={` border-x-0 py-1 whitespace-nowrap ${
                           mode ? "border-y-slate-300" : "border-gray-300  "
                         }`}
                       >
-                        {tpa?.DocName}
+                        {tpa?.Amount}
                       </td>
                       <td
                         className={` border-x-0 py-1 whitespace-nowrap ${
                           mode ? "border-y-slate-300" : "border-gray-300  "
                         }`}
                       >
-                        {`${Math.abs(tpa?.Amount)}`}
+                        {tpa?.ProcessedDate.substring(0,10)}
                       </td>
                       <td
                         className={` border-x-0 py-1 whitespace-nowrap ${
                           mode ? "border-y-slate-300" : "border-gray-300  "
                         }`}
                       >
-                        {tpa?.DocDate}
+                        {tpa?.Document_Date}
                       </td>
                       <td
                         className={` border-x-0 py-1 whitespace-nowrap ${
                           mode ? "border-y-slate-300" : "border-gray-300  "
                         }`}
                       >
-                        {tpa?.ProcessedDate}
+                      {tpa?.Posting_Date}
                       </td>
                       <td
                         className={` border-x-0 py-1 whitespace-nowrap ${
                           mode ? "border-y-slate-300" : "border-gray-300  "
                         }`}
                       >
-                        {tpa?.Text.substring(0, 30)}
+                      {tpa?.Entry_Date}
                       </td>
                       <td
                         className={` border-x-0 py-1 whitespace-nowrap ${
                           mode ? "border-y-slate-300" : "border-gray-300  "
                         }`}
                       >
-                        {tpa?.Text.substring(0, 30)}
+                      {tpa?.TPAID_Location}
+                      </td>
+                      <td
+                        className={` border-x-0 py-1 whitespace-nowrap ${
+                          mode ? "border-y-slate-300" : "border-gray-300"
+                        }`}
+                      >
+                      {tpa?.ContactDetails}
                       </td>
                       <td
                         className={` border-x-0 py-1 whitespace-nowrap ${
                           mode ? "border-y-slate-300" : "border-gray-300  "
                         }`}
                       >
-                        {tpa?.Text.substring(0, 30)}
+                      {tpa?.SecurityDeposit}
                       </td>
                       <td
                         className={` border-x-0 py-1 whitespace-nowrap ${
                           mode ? "border-y-slate-300" : "border-gray-300  "
                         }`}
                       >
-                        {tpa?.Text.substring(0, 30)}
+                      {tpa?.ShortPaidRemarks}
                       </td>
                       <td
                         className={` border-x-0 py-1 whitespace-nowrap ${
                           mode ? "border-y-slate-300" : "border-gray-300  "
                         }`}
                       >
-                        {tpa?.Text.substring(0, 30)}
+                      {tpa?.DocumentHeaderText}
                       </td>
                       <td
                         className={` border-x-0 py-1 whitespace-nowrap ${
                           mode ? "border-y-slate-300" : "border-gray-300  "
                         }`}
                       >
-                        {tpa?.Text.substring(0, 30)}
-                      </td>
-                      <td
-                        className={` border-x-0 py-1 whitespace-nowrap ${
-                          mode ? "border-y-slate-300" : "border-gray-300  "
-                        }`}
-                      >
-                        {tpa?.Text.substring(0, 30)}
-                      </td>
-                      <td
-                        className={` border-x-0 py-1 whitespace-nowrap ${
-                          mode ? "border-y-slate-300" : "border-gray-300  "
-                        }`}
-                      >
-                        {tpa?.Text.substring(0, 30)}
+                      {tpa?.TextN}
                       </td>
                     </tr>
                   ))}
@@ -671,91 +725,39 @@ const Home = ({ mode }) => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.5 }}
           >
-            <div className="px-1 py-2 mr-2 border-gray-300 rounded-lg border-[1px] bg-gray-100">
+              <div className={`px-1 py-2 mr-2 rounded-lg ${
+                    mode ? "bg-[#fff]" : "bg-[#303053]"
+                  } `}>
               <HorizontalBarChartTOP top5={top} />
             </div>
-            <div className="px-1 py-2  border-gray-300 rounded-lg border-[1px] bg-gray-100">
+            <div className={`px-1 py-2 rounded-lg ${
+                    mode ? "bg-[#fff]" : "bg-[#303053]"
+                  }`}>
               <HorizontalBarChartBottom bottom5={bottom} />
-              {/* <div className="bg-white mr-2 px-2 py-2 rounded-lg h-[35vh] border mt-10">
-                <h5 className="text-black text-center bg-gray-300 py-1">
-                  Top 5 Pending TPA
-                </h5>
-                <table className="w-full">
-                  <thead className={`${mode ? "" : "text-black"} sticky top-0`}>
-                    <tr
-                      className={`text-[0.9rem] ${
-                        mode ? "#e6e6e6" : "bg-[#e6e6e6]"
-                      } `}
-                    >
-                      <th className="p-1 text-center">Sl No</th>
-                      <th className="p-1 text-center">Customer_Name</th>
-                      <th className="p-1 text-center">Count</th>
-                      <th className="p-1 text-center">Pending</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {top?.map((tpa, index) => (
-                      <tr
-                        key={index}
-                        className={`text-center text-[0.8rem] ${
-                          index % 2 !== 0 ? "bg-gray-100" : "bg-white"
-                        } ${mode ? "text-black" : "text-black"}`}
-                      >
-                        <td
-                          className={` border-x-0 py-1 ${
-                            mode ? "border-y-slate-300" : "border-gray-300"
-                          }`}
-                        >
-                          {index + 1}
-                        </td>
-                        <td
-                          className={` border-x-0 py-1 ${
-                            mode ? "border-y-slate-300" : "border-gray-300  "
-                          }`}
-                        >
-                          {tpa?.CustName?.length > 30
-                            ? tpa?.CustName.substring(0, 200) + "..."
-                            : tpa?.CustName}
-                        </td>
-                        <td
-                          className={` border-x-0 py-1 ${
-                            mode ? "border-y-slate-300" : "border-gray-300  "
-                          }`}
-                        >
-                          {tpa?.Count}
-                        </td>
-                        <td
-                          className={` border-x-0 py-1 ${
-                            mode ? "border-y-slate-300" : "border-gray-300"
-                          }`}
-                        >
-                          {Math.abs(tpa?.Amount)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div> */}
+             
             </div>
           </motion.div>
 
+        
           <motion.div
-            className="mt-4  grid grid-cols-2 w-[80vw] mx-auto"
+            className="mt-4  grid grid-cols-2 w-[88%] mx-auto "
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.5 }}
           >
-            <div className="bg-white mr-2 px-2 py-2 border h-[35vh]  ">
-              <h5 className="text-black text-center bg-gray-300 py-1">
+            <div className={`${
+                    mode ? "bg-[#fff]" : "bg-[#303053]"
+                  } mr-2 px-2 py-2  h-[35vh]`}>
+              <h5 className="text-center">
                 Top 5 Pending TPA
               </h5>
               <table className="w-full">
-                <thead className={`${mode ? "" : "text-black"} sticky top-0`}>
-                  <tr
-                    className={`text-[0.9rem] ${
-                      mode ? "#e6e6e6" : "bg-[#e6e6e6]"
-                    } `}
-                  >
+              <thead className={`${mode ? "text-black" : "text-[#fff]"} sticky top-0`}>
+                <tr
+                  className={`text-[0.9rem] ${
+                    mode ? "bg-[#dee4ff]" : "bg-[#29295e]"
+                  } `}
+                >
                     <th className="p-1 text-center">Sl No</th>
                     <th className="p-1 text-center">Customer_Name</th>
                     <th className="p-1 text-center">Count</th>
@@ -766,9 +768,9 @@ const Home = ({ mode }) => {
                   {top?.map((tpa, index) => (
                     <tr
                       key={index}
-                      className={`text-center text-[0.8rem] ${
-                        index % 2 !== 0 ? "bg-gray-100" : "bg-white"
-                      } ${mode ? "text-black" : "text-black"}`}
+                      className={`text-center text-[0.8rem] ${ mode ?
+                        index % 2 !== 0 ? "bg-blue-100" : "bg-white" :  index % 2 !== 0 ? "bg-[#303053]" : "bg-[#303053]" 
+                      } ${mode ? "text-black" : "text-white"}`}
                     >
                       <td
                         className={` border-x-0 py-1 ${
@@ -805,17 +807,19 @@ const Home = ({ mode }) => {
                 </tbody>
               </table>
             </div>
-            <div className=" px-2 py-2 border h-[35vh] bg-white ">
-              <h5 className="text-black text-center bg-gray-300 py-1">
+            <div className={`${
+                    mode ? "bg-[#fff]" : "bg-[#303053]"
+                  } mr-2 px-2 py-2  h-[35vh]`}>
+              <h5 className="text-center ">
                 Bottom 5 Pending TPA
               </h5>
               <table className="w-full">
-                <thead className={`${mode ? "" : "text-black"} sticky top-0`}>
-                  <tr
-                    className={`text-[0.9rem] ${
-                      mode ? "#e6e6e6" : "bg-[#e6e6e6]"
-                    } `}
-                  >
+              <thead className={`${mode ? "text-black" : "text-[#fff]"} sticky top-0`}>
+                <tr
+                  className={`text-[0.9rem] ${
+                    mode ? "bg-[#dee4ff]" : "bg-[#29295e]"
+                  } `}
+                >
                     <th className="p-1 text-center">Sl No</th>
                     <th className="p-1 text-center">Customer_Name</th>
                     <th className="p-1 text-center">Count</th>
@@ -824,11 +828,11 @@ const Home = ({ mode }) => {
                 </thead>
                 <tbody>
                   {bottom?.map((tpa, index) => (
-                    <tr
+                      <tr
                       key={index}
-                      className={`text-center text-[0.8rem] ${
-                        index % 2 !== 0 ? "bg-gray-100" : "bg-white"
-                      } ${mode ? "text-black" : "text-black"}`}
+                      className={`text-center text-[0.8rem] ${ mode ?
+                        index % 2 !== 0 ? "bg-blue-100" : "bg-white" :  index % 2 !== 0 ? "bg-[#303053]" : "bg-[#303053]" 
+                      } ${mode ? "text-black" : "text-white"}`}
                     >
                       <td
                         className={` border-x-0 py-1 ${
@@ -868,17 +872,17 @@ const Home = ({ mode }) => {
           </motion.div>
 
           <motion.div
-            className="h-[62vh] overflow-y-auto overflow-hidden border mt-3 w-[80vw] mx-auto"
+            className="h-[62vh] overflow-y-auto overflow-hidden mt-3 w-[80vw] mx-auto"
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1 }}
           >
             <table className="w-full">
-              <thead className={`${mode ? "" : "text-black"} sticky top-0`}>
+            <thead className={`${mode ? "text-black" : "text-[#fff]"} sticky top-0`}>
                 <tr
                   className={`text-[0.9rem] ${
-                    mode ? "#e6e6e6" : "bg-[#e6e6e6]"
-                  }`}
+                    mode ? "bg-[#dee4ff]" : "bg-[#29295e]"
+                  } `}
                 >
                   <th
                     className="p-1 text-center"
@@ -930,12 +934,12 @@ const Home = ({ mode }) => {
               </thead>
               <tbody>
                 {currentItemsCusAmount.map((tpa, index) => (
-                  <tr
-                    key={index}
-                    className={`text-center text-[0.8rem] ${
-                      index % 2 !== 0 ? "bg-gray-100" : "bg-white"
-                    } ${mode ? "text-black" : "text-black"}`}
-                  >
+                 <tr
+                 key={index}
+                 className={`text-center text-[0.8rem] ${ mode ?
+                   index % 2 !== 0 ? "bg-blue-100" : "bg-white" :  index % 2 !== 0 ? "bg-[#303053]" : "bg-[#303053]" 
+                 } ${mode ? "text-black" : "text-white"}`}
+               >
                     <td
                       className={` border-x-0 py-1 ${
                         mode ? "border-y-slate-300" : "border-gray-300"
@@ -1042,4 +1046,4 @@ const Home = ({ mode }) => {
   );
 };
 
-export default Home;
+export default DailyReports;

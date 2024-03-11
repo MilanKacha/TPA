@@ -22,7 +22,7 @@ const Sidebar = ({ mode, loginHandler }) => {
   const [open, setOpen] = useState(false);
   const [menuStates, setMenuStates] = useState({});
 
-  let menus = [];
+  let menus = [ ];
 
   if (billing) {
     menus = [
@@ -84,7 +84,7 @@ const Sidebar = ({ mode, loginHandler }) => {
 
   return (
     <div
-      className={`bg-[#003EAA] text-[#fff] ${
+      className={`${mode ? "bg-[#003EAA]" : "bg-[#303053]"} text-[#fff] ${
         open ? "w-64" : "w-20"
       } duration-500 px-4 shadow-black overflow-hidden`}
     >
@@ -169,7 +169,7 @@ const Sidebar = ({ mode, loginHandler }) => {
           </div>
         ))}
       </div>
-      <div className="flex items-center justify-center mt-1 text-white">
+      {/* <div className="flex items-center justify-center mt-1 text-white">
         <button
           className={` ${
             mode ? "hover:text-red-600" : "hover:text-red-600"
@@ -186,7 +186,7 @@ const Sidebar = ({ mode, loginHandler }) => {
         >
           <IoIosLogOut size={25} />
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };

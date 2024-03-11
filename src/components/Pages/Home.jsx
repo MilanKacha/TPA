@@ -4,11 +4,8 @@ import moment from "moment";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 import HorizontalBarChartTOP from "../Charts/Chartpendingtop";
 import HorizontalBarChartBottom from "../Charts/Chartpendingbottom";
-import { FaRupeeSign } from "react-icons/fa";
-// import { RiMoneyPoundCircleLine } from "react-icons/ri";
 import { motion } from "framer-motion";
 import ExcleFileUplodeModal from "../Modal/ExcleFileUplodeModal";
-import { ImListNumbered } from "react-icons/im";
 import * as XLSX from "xlsx";
 
 const Home = ({ mode }) => {
@@ -25,7 +22,7 @@ const Home = ({ mode }) => {
   // console.log(dateCount);
 
   const [tpaData, setTpaData] = useState(null);
-  // console.log(tpaData);
+  console.log(tpaData);
 
   const [countData, setCountData] = useState(null);
   const [currentPageCusAmount, setCurrentPageCusAmount] = useState(1);
@@ -43,6 +40,7 @@ const Home = ({ mode }) => {
 
   const [error, setError] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  
 
   const onCloseModal = () => {
     setModalIsOpen(false);
@@ -104,30 +102,14 @@ const Home = ({ mode }) => {
   };
 
   function convertToAspNetDate(dateString) {
-    // Parse the date string into a JavaScript Date object
     const date = new Date(dateString);
-
-    // Set the time part of the date to represent the start of the day (midnight)
     date.setHours(0, 0, 0, 0);
-
-    // Get the milliseconds since the Unix epoch
     const milliseconds = date.getTime();
-
-    // Format the milliseconds into the ASP.NET date format
     const aspNetDate = `/Date(${milliseconds})/`;
-
     return aspNetDate;
   }
 
-  // const handleDateChange = (event) => {
-  //   setSelectedDate(event.target.value);
-  // };
-  // console.log(convertToAspNetDate(selectedDate));
-  // console.log(selectedDate);
-  // const filteredTpaData =
-  //   selectedCustomerName === "All"
-  //     ? tpaData
-  //     : tpaData?.filter((tpa) => tpa?.CustomerName === selectedCustomerName);
+ 
 
   const filteredTpaData =
     tpaData && tpaData.length > 0
@@ -145,7 +127,6 @@ const Home = ({ mode }) => {
           ) {
             return false;
           }
-
           return true;
         })
       : [];
@@ -154,20 +135,10 @@ const Home = ({ mode }) => {
     setSelectedDateCount(event.target.value);
   };
 
-  // table 2 date
-  // const filterCountData =
-  //   dateCount &&
-  //   (selectedDateCount
-  //     ? dateCount.filter((el) => {
-  //         return el.Date == convertDateFormat(selectedDateCount);
-  //       })
-  //     : dateCount);
-
-  // console.log(convertDateFormat(selectedDateCount));
 
   const filterData = () => {
     if (!selectedDateCount) {
-      setFilteredData(dateCount); // Display entire data when no date is selected
+      setFilteredData(dateCount); 
       return;
     }
 
@@ -279,22 +250,7 @@ const Home = ({ mode }) => {
     }
   };
 
-  // convert data
-  // function convertASPNetDate(aspNetDate) {
-  //   const milliseconds = parseInt(
-  //     aspNetDate.replace(/\/Date\((-?\d+)\)\//, "$1")
-  //   );
-
-  //   const date = new Date(milliseconds);
-
-  //   // Format the date as dd-mm-yy
-  //   const day = date.getDate().toString().padStart(2, "0");
-  //   const month = (date.getMonth() + 1).toString().padStart(2, "0");
-  //   const year = date.getFullYear().toString().slice(-2);
-
-  //   return `${day}-${month}-${year}`;
-  // }
-
+ 
   const filterDataExport = () => {
     const filtered = selectedDateCount
       ? tpaData.filter(
@@ -320,14 +276,15 @@ const Home = ({ mode }) => {
 
   return (
     <>
-      <div className="overflow-auto h-[100vh] mx-auto ">
+      <div className={`overflow-auto h-[100vh] mx-auto ${mode ? "text-[#000]" : "text-[#c2c2c2]"}`} >
         <motion.h3
-          className="flex justify-start pl-6 items-center bg-[#E3EDFF] h-[8vh] fixed w-full  z-50"
+          className={"flex justify-start pl-6 items-center bg-transparent h-[8vh] w-full  z-50"}
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1 }}
         >
           <div>Pending Reports</div>
+          
           <div className="ml-4">
             <button
               className="text-white text-[15px] bg-gradient-to-r from-[#4747d7] to-[#00d7ff] py-[10px] px-4 rounded-[40px] transition duration-300 ease-in-out transform hover:scale-105 hover:from-[#00d7ff] hover:to-[#4747d7]"
@@ -339,31 +296,34 @@ const Home = ({ mode }) => {
         </motion.h3>
         <ExcleFileUplodeModal isOpen={modalIsOpen} onClose={onCloseModal} />
 
-        <div className="flex justify-evenly h-[6rem] mt-[14vh]">
-          <button className={`font-medium rounded-xl w-[14rem]`}>
-            <span className="text-black text-[2rem]">Pending</span>
+        <div className="flex justify-evenly h-[6rem] mt-[4vh]">
+          <button className={`font-medium rounded-xl w-[14rem] `}>
+            <span className= {`${mode ? "text-[#000]" : "text-[#c2c2c2]"} text-[2rem]`}>Pending</span>
             <br />
-            <span className="text-blue-600">{Math.abs(pendingAmount)}</span>
+            {/* <span className="text-blue-600">{Math.abs(pendingAmount)}</span> */}
+            <span className="text-blue-600 text-[2rem]">₹85,78,88,981.3</span>
           </button>
           <button className={`font-medium rounded-xl w-[14rem]`}>
-            <span className="text-black text-[2rem]">Count</span>
+          <span className= {`${mode ? "text-[#000]" : "text-[#c2c2c2]"} text-[2rem]`}>Count</span>
             <br />
-            <span className="text-green-600"> {count}</span>
+            {/* <span className="text-green-600"> {count}</span> */}
+            <span className="text-green-600 text-[30px]">4040</span>
           </button>
           <button className={`font-medium rounded-xl w-[14rem]`}>
-            <span className="text-black text-[2rem]">Pending</span>
+          <span className= {`${mode ? "text-[#000]" : "text-[#c2c2c2]"} text-[2rem]`}>Processed
+</span>
             <br />
-            <span className="text-red-600">12345678</span>
+            <span className="text-red-600 text-[30px]">3000</span>
           </button>
           <button className={`font-medium rounded-xl w-[14rem] `}>
-            <span className="text-black text-[2rem]">Pending</span>
+          <span className= {`${mode ? "text-[#000]" : "text-[#c2c2c2]"} text-[2rem]`}>UnProcessed</span>
             <br />
-            <span className="text-[#e707dc]">12345678</span>
+            <span className="text-[#e707dc] text-[30px]">1000</span>
           </button>
           <button className={`font-medium rounded-xl w-[14rem] `}>
-            <span className="text-black text-[2rem]">Pending</span>
+          <span className= {`${mode ? "text-[#000]" : "text-[#c2c2c2]"} text-[2rem]`}>Exception</span>
             <br />
-            <span className="text-[#A855F7]">1234567891011.22</span>
+            <span className="text-[#A855F7] text-[30px]">40</span>
           </button>
         </div>
 
@@ -376,7 +336,7 @@ const Home = ({ mode }) => {
           <div className="pr-2 flex items-center text-[15px] w-[70%]">
             <div className="w-[80%]">
               <select
-                className="border border-gray-100  bg-[#E3EDFF] rounded-[2px] px-3 py-1 focus:outline-none focus:border-blue-500 mr-2 w-full"
+                className={`rounded-[2px] px-3 py-1 focus:outline-none focus:border-blue-500 mr-2 w-full ${mode ? 'bg-[#ffffff]' : 'bg-[#303053]'}`}
                 value={selectedCustomerName}
                 onChange={handleChange}
               >
@@ -384,21 +344,14 @@ const Home = ({ mode }) => {
                   <option
                     key={index}
                     value={item?.CustName}
-                    className="bg-gradient-to-r from-[#4747d7] to-[#00d7ff]"
+                    className={`${mode ? 'bg-gradient-to-r from-[#4747d7] to-[#00d7ff]' : 'bg-[#303053]'}`}
                   >
                     {item?.CustName}
                   </option>
                 ))}
               </select>
             </div>
-            {/* <div>
-              <input
-                type="date"
-                className="border border-gray-300 rounded-[2px] px-3 py-1 focus:outline-none focus:border-blue-500 ml-2"
-                value={selectedDate}
-                onChange={handleDateChange}
-              />
-            </div> */}
+        
             <div
               className="text-white text-[15px] bg-gradient-to-r from-[#4747d7] to-[#00d7ff] py-[5px] px-4 rounded-[5px] transition duration-300 ease-in-out transform hover:scale-100 ml-2 hover:from-[#00d7ff] hover:to-[#4747d7]"
               onClick={() => exportToExcel(filteredTpaData)}
@@ -439,19 +392,19 @@ const Home = ({ mode }) => {
         </motion.div>
         <div className="flex flex-col mt-3 w-[80vw] mx-auto">
           <motion.div
-            className="h-[60vh] overflow-y-auto overflow-hidden border"
+            className="h-[60vh] overflow-y-auto overflow-hidden"
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1 }}
           >
             <table className="w-full ">
-              <thead className={`${mode ? "" : "text-black"} sticky top-0`}>
+              <thead className={`${mode ? "text-black" : "text-[#fff]"} sticky top-0`}>
                 <tr
                   className={`text-[0.9rem] ${
-                    mode ? "#e6e6e6" : "bg-[#dee4ff]"
+                    mode ? "bg-[#dee4ff]" : "bg-[#29295e]"
                   } `}
                 >
-                  <th className="p-1 text-center">Sl No</th>
+                  <th className="p-1 text-center px-[20px]">Sl No</th>
                   <th className="p-1 text-center">Customer_Name</th>
                   <th className="p-1 text-center">Reference</th>
                   <th className="p-1 text-center">Assignment</th>
@@ -466,9 +419,9 @@ const Home = ({ mode }) => {
                 {currentItems?.map((tpa, index) => (
                   <tr
                     key={index}
-                    className={`text-center text-[0.8rem] ${
-                      index % 2 !== 0 ? "bg-blue-100" : "bg-white"
-                    } ${mode ? "text-black" : "text-black"}`}
+                    className={`text-center text-[0.8rem] ${ mode ?
+                      index % 2 !== 0 ? "bg-blue-100" : "bg-white" :  index % 2 !== 0 ? "bg-[#303053]" : "bg-[#303053]" 
+                    } ${mode ? "text-black" : "text-white"}`}
                   >
                     <td
                       className={` border-x-0 py-1 ${
@@ -613,7 +566,9 @@ const Home = ({ mode }) => {
             <div className="mb-1 flex justify-end ">
               <input
                 type="date"
-                className="border border-gray-300 rounded-[2px] px-3 py-1 focus:outline-none focus:border-blue-500 "
+                className={`rounded-[2px] px-3 py-1 focus:outline-none focus:border-blue-500 ${
+                  mode ? "bg-[#dee4ff]" : "bg-[#303053]"
+                }`}
                 value={selectedDateCount}
                 onChange={handleDateChangeCountDate}
               />
@@ -631,18 +586,20 @@ const Home = ({ mode }) => {
               </div>
             </div>
             <motion.div
-              className="h-[60vh] overflow-y-auto overflow-hidden border mt-1 bg-white "
+              className={`h-[60vh] overflow-y-auto overflow-hidden mt-1 ${
+                mode ? "bg-[#fff]" : "bg-[#303053]"
+              }`}
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1 }}
             >
               <table className="w-full ">
-                <thead className={`${mode ? "" : "text-black"} sticky top-0`}>
-                  <tr
-                    className={`text-[0.9rem] ${
-                      mode ? "#e6e6e6" : "bg-[#dee4ff]"
-                    } `}
-                  >
+              <thead className={`${mode ? "text-black" : "text-[#fff]"} sticky top-0`}>
+                <tr
+                  className={`text-[0.9rem] ${
+                    mode ? "bg-[#dee4ff]" : "bg-[#29295e]"
+                  } `}
+                >
                     <th className="p-1 text-center">Sl No</th>
                     <th className="p-1 text-center">Pro.Date</th>
                     <th className="p-1 text-center">Count</th>
@@ -654,9 +611,9 @@ const Home = ({ mode }) => {
                     currentItemsDateCount?.map((tpa, index) => (
                       <tr
                         key={index}
-                        className={`text-center text-[0.8rem] ${
-                          index % 2 !== 0 ? "bg-blue-100" : "bg-white"
-                        } ${mode ? "text-black" : "text-black"}`}
+                        className={`text-center text-[0.8rem] ${ mode ?
+                          index % 2 !== 0 ? "bg-blue-100" : "bg-white" :  index % 2 !== 0 ? "bg-[#303053]" : "bg-[#303053]" 
+                        } ${mode ? "text-black" : "text-white"}`}
                       >
                         <td
                           className={` border-x-0 py-1 ${
@@ -766,71 +723,16 @@ const Home = ({ mode }) => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.5 }}
           >
-            <div className="px-1 py-2 mr-2 border-gray-300 rounded-lg border-[1px] bg-gray-100">
-              <HorizontalBarChartTOP top5={top} />
+            <div className={`px-1 py-2 mr-2 rounded-lg ${
+                    mode ? "bg-[#fff]" : "bg-[#303053]"
+                  } `}>
+              <HorizontalBarChartTOP top5={top} mode={mode} />
             </div>
-            <div className="px-1 py-2  border-gray-300 rounded-lg border-[1px] bg-gray-100">
-              <HorizontalBarChartBottom bottom5={bottom} />
-              {/* <div className="bg-white mr-2 px-2 py-2 rounded-lg h-[35vh] border mt-10">
-                <h5 className="text-black text-center bg-gray-300 py-1">
-                  Top 5 Pending TPA
-                </h5>
-                <table className="w-full">
-                  <thead className={`${mode ? "" : "text-black"} sticky top-0`}>
-                    <tr
-                      className={`text-[0.9rem] ${
-                        mode ? "#e6e6e6" : "bg-[#e6e6e6]"
-                      } `}
-                    >
-                      <th className="p-1 text-center">Sl No</th>
-                      <th className="p-1 text-center">Customer_Name</th>
-                      <th className="p-1 text-center">Count</th>
-                      <th className="p-1 text-center">Pending</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {top?.map((tpa, index) => (
-                      <tr
-                        key={index}
-                        className={`text-center text-[0.8rem] ${
-                          index % 2 !== 0 ? "bg-gray-100" : "bg-white"
-                        } ${mode ? "text-black" : "text-black"}`}
-                      >
-                        <td
-                          className={` border-x-0 py-1 ${
-                            mode ? "border-y-slate-300" : "border-gray-300"
-                          }`}
-                        >
-                          {index + 1}
-                        </td>
-                        <td
-                          className={` border-x-0 py-1 ${
-                            mode ? "border-y-slate-300" : "border-gray-300  "
-                          }`}
-                        >
-                          {tpa?.CustName?.length > 30
-                            ? tpa?.CustName.substring(0, 200) + "..."
-                            : tpa?.CustName}
-                        </td>
-                        <td
-                          className={` border-x-0 py-1 ${
-                            mode ? "border-y-slate-300" : "border-gray-300  "
-                          }`}
-                        >
-                          {tpa?.Count}
-                        </td>
-                        <td
-                          className={` border-x-0 py-1 ${
-                            mode ? "border-y-slate-300" : "border-gray-300"
-                          }`}
-                        >
-                          {Math.abs(tpa?.Amount)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div> */}
+            <div className={`px-1 py-2 rounded-lg ${
+                    mode ? "bg-[#fff]" : "bg-[#303053]"
+                  }`}>
+              <HorizontalBarChartBottom bottom5={bottom} mode={mode}  />
+             
             </div>
           </motion.div>
 
@@ -840,17 +742,19 @@ const Home = ({ mode }) => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.5 }}
           >
-            <div className="bg-white mr-2 px-2 py-2 border h-[35vh]  ">
-              <h5 className="text-black text-center bg-gray-300 py-1">
+            <div className={`${
+                    mode ? "bg-[#fff]" : "bg-[#303053]"
+                  } mr-2 px-2 py-2  h-[35vh]`}>
+              <h5 className="text-center">
                 Top 5 Pending TPA
               </h5>
               <table className="w-full">
-                <thead className={`${mode ? "" : "text-black"} sticky top-0`}>
-                  <tr
-                    className={`text-[0.9rem] ${
-                      mode ? "#e6e6e6" : "bg-[#dee4ff]"
-                    } `}
-                  >
+              <thead className={`${mode ? "text-black" : "text-[#fff]"} sticky top-0`}>
+                <tr
+                  className={`text-[0.9rem] ${
+                    mode ? "bg-[#dee4ff]" : "bg-[#29295e]"
+                  } `}
+                >
                     <th className="p-1 text-center">Sl No</th>
                     <th className="p-1 text-center">Customer_Name</th>
                     <th className="p-1 text-center">Count</th>
@@ -861,9 +765,9 @@ const Home = ({ mode }) => {
                   {top?.map((tpa, index) => (
                     <tr
                       key={index}
-                      className={`text-center text-[0.8rem] ${
-                        index % 2 !== 0 ? "bg-blue-100" : "bg-white"
-                      } ${mode ? "text-black" : "text-black"}`}
+                      className={`text-center text-[0.8rem] ${ mode ?
+                        index % 2 !== 0 ? "bg-blue-100" : "bg-white" :  index % 2 !== 0 ? "bg-[#303053]" : "bg-[#303053]" 
+                      } ${mode ? "text-black" : "text-white"}`}
                     >
                       <td
                         className={` border-x-0 py-1 ${
@@ -900,21 +804,19 @@ const Home = ({ mode }) => {
                 </tbody>
               </table>
             </div>
-            <div className=" px-2 py-2 border h-[35vh] bg-white ">
-              <h5 className="text-black text-center bg-gray-300 py-1">
+            <div className={`${
+                    mode ? "bg-[#fff]" : "bg-[#303053]"
+                  } mr-2 px-2 py-2  h-[35vh]`}>
+              <h5 className="text-center ">
                 Bottom 5 Pending TPA
               </h5>
               <table className="w-full">
-                <thead
-                  className={`${
-                    mode ? "bg-blue-100" : "text-black"
-                  } sticky top-0`}
+              <thead className={`${mode ? "text-black" : "text-[#fff]"} sticky top-0`}>
+                <tr
+                  className={`text-[0.9rem] ${
+                    mode ? "bg-[#dee4ff]" : "bg-[#29295e]"
+                  } `}
                 >
-                  <tr
-                    className={`text-[0.9rem] ${
-                      mode ? "#e6e6e6" : "bg-[#dee4ff]"
-                    } `}
-                  >
                     <th className="p-1 text-center">Sl No</th>
                     <th className="p-1 text-center">Customer_Name</th>
                     <th className="p-1 text-center">Count</th>
@@ -923,11 +825,11 @@ const Home = ({ mode }) => {
                 </thead>
                 <tbody>
                   {bottom?.map((tpa, index) => (
-                    <tr
+                      <tr
                       key={index}
-                      className={`text-center text-[0.8rem] ${
-                        index % 2 !== 0 ? "bg-blue-100" : "bg-white"
-                      } ${mode ? "text-black" : "text-black"}`}
+                      className={`text-center text-[0.8rem] ${ mode ?
+                        index % 2 !== 0 ? "bg-blue-100" : "bg-white" :  index % 2 !== 0 ? "bg-[#303053]" : "bg-[#303053]" 
+                      } ${mode ? "text-black" : "text-white"}`}
                     >
                       <td
                         className={` border-x-0 py-1 ${
@@ -967,16 +869,16 @@ const Home = ({ mode }) => {
           </motion.div>
 
           <motion.div
-            className="h-[62vh] overflow-y-auto overflow-hidden border mt-3"
+            className="h-[62vh] overflow-y-auto overflow-hidden mt-3"
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1 }}
           >
             <table className="w-full">
-              <thead className={`${mode ? "" : "text-black"} sticky top-0`}>
+            <thead className={`${mode ? "text-black" : "text-[#fff]"} sticky top-0`}>
                 <tr
                   className={`text-[0.9rem] ${
-                    mode ? "#e6e6e6" : "bg-[#dee4ff]"
+                    mode ? "bg-[#dee4ff]" : "bg-[#29295e]"
                   } `}
                 >
                   <th
@@ -1030,11 +932,11 @@ const Home = ({ mode }) => {
               <tbody>
                 {currentItemsCusAmount.map((tpa, index) => (
                   <tr
-                    key={index}
-                    className={`text-center text-[0.8rem] ${
-                      index % 2 !== 0 ? "bg-blue-100" : "bg-white"
-                    } ${mode ? "text-black" : "text-black"}`}
-                  >
+                  key={index}
+                  className={`text-center text-[0.8rem] ${ mode ?
+                    index % 2 !== 0 ? "bg-blue-100" : "bg-white" :  index % 2 !== 0 ? "bg-[#303053]" : "bg-[#303053]" 
+                  } ${mode ? "text-black" : "text-white"}`}
+                >
                     <td
                       className={` border-x-0 py-1 ${
                         mode ? "border-y-slate-300" : "border-gray-300"
@@ -1069,7 +971,7 @@ const Home = ({ mode }) => {
             </table>
           </motion.div>
           <motion.div
-            className="flex justify-center mt-2 text-black mb-2 pb-2"
+            className="flex justify-center mt-2 text-black mb-10 pb-2"
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.5 }}

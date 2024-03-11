@@ -21,7 +21,7 @@ ChartJS.register(
   ChartDataLabels
 );
 
-const HorizontalBarChartTOP = ({ top5 }) => {
+const HorizontalBarChartTOP = ({ top5, mode }) => {
   const chartRef = useRef(null);
 
   const labels = top5

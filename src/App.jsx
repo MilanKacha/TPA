@@ -10,7 +10,9 @@ import Home from "./components/Pages/Home";
 import HospitalLogin from "./components/Pages/Login/HospitalLogin";
 import DailyReports from "./components/Report/DailyReports/DailyReports";
 
+
 import Toaster from "./components/Utils/Toaster";
+
 
 // import { theme } from "./assets/theme";
 
@@ -52,18 +54,23 @@ const App = () => {
   // const show = location.pathname === "/Manipal";
 
   return (
-    <div className="h-[100vh] bg-[#E3EDFF]">
+    <div className="h-[100vh]">
       <Toaster />
-      {/* {logged && (
+      {logged && (
         <Header
           loginHandler={loginHandler}
           modeHandler={modeHandler}
           // theme={theme}
         />
-      )} */}
-      <section className={`flex bg-[rgb(227, 237, 255)] h-[100vh]`}>
+      )}
+      <section className={`flex h-[94vh]  border-red-500 overflow-hidden`}>
         {logged && <Sidebar mode={mode} loginHandler={loginHandler} />}
-        <div className="h-full w-full">
+        {/* <div className="h-full w-full bg-[#E3EDFF]  "> */}
+
+        
+        {/* <div className={`h-full w-full  ${mode ? "bg-[#E3EDFF]" : "bg-gradient-to-r from-[#25253f] to-[#252535]"}`}> */}
+        <div className={`h-full w-full ${mode ? "bg-[#E3EDFF]" : "bg-[#24243d]"}`}>
+  {/* Content goes here */}
           {!logged && (
             <Routes>
               <Route

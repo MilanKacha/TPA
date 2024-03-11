@@ -28,9 +28,9 @@ const Header = ({ loginHandler, modeHandler, theme }) => {
 
   return (
     <div
-      className={`"bg-[#f1ebfa] text-[#000]"
+      className={`${mode ? "bg-[#003EAA]" : "bg-[#303053]"} text-[#fff]
      flex justify-end items-center duration-500 p-2 font-semibold h-[6vh] shadow-md shadow-black/0"
-     } `}
+  } `}
     >
       {/* <div className="w-36">
         <img src={"../src/assets/emtech-black.png"} alt="EM-Tech" />
@@ -46,7 +46,7 @@ const Header = ({ loginHandler, modeHandler, theme }) => {
           <div>{date}</div>
           <div>{time}</div>
         </div> */}
-        {/* <button
+        <button
           className={`${
             mode ? "hover:bg-gray-100" : "hover:bg-[#31304D]"
           } p-1 rounded-lg`}
@@ -57,7 +57,7 @@ const Header = ({ loginHandler, modeHandler, theme }) => {
           ) : (
             <MdOutlineLightMode size={20} />
           )}
-        </button> */}
+        </button>
         <button
           className={`${
             mode ? "hover:bg-gray-100" : "hover:bg-[#31304D]"
