@@ -9,6 +9,7 @@ import Home from "./components/Pages/Home";
 
 import HospitalLogin from "./components/Pages/Login/HospitalLogin";
 import DailyReports from "./components/Report/DailyReports/DailyReports";
+import TpaaccessInfo from "./components/TPA/TPAaccessInfo/TpaaccessInfo"
 
 
 import Toaster from "./components/Utils/Toaster";
@@ -90,6 +91,7 @@ const App = () => {
                 element={<DailyReports mode={mode} />}
               />
               <Route path="/managing_reports" element={<Home mode={mode} />} />
+              <Route path="/tpa_access_info" element={<TpaaccessInfo mode={mode} />} />
             </Routes>
           )}
         </div>

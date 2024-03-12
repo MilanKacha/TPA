@@ -51,16 +51,17 @@ const Sidebar = ({ mode, loginHandler }) => {
           { name: "Managing", link: "/managing_reports" },
         ],
       },
-      // {
-      //   name: "Home",
-      //   link: "/home",
-      //   icon: FaHome,
-      //   children: [
-      //     { name: "Pending", link: "/pending" },
-      //     { name: "Documents", link: "/documents" },
-      //     { name: "Managing", link: "/managing" },
-      //   ],
-      // },
+      {
+        name: " TPA Communication",
+        link: "/tpa_access",
+        icon: RiFilePdfFill,
+        children: [
+          { name: "TPA Access Info.", link: "/tpa_access_info" },
+          { name: "Daily", link: "/daily_reports" },
+          { name: "Managing", link: "/managing_reports" },
+        ],
+      },
+   
     ];
   }
 
