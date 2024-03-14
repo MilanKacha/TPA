@@ -15,6 +15,8 @@ const DailyReports = ({ mode }) => {
   const [selectedCustomerName, setSelectedCustomerName] = useState("All");
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedDateCount, setSelectedDateCount] = useState("");
+  const [showTableTop5,setShowTableTop5] = useState(false) 
+  const [showTableDataBottom5, setShowTableDataBottom5] = useState(false)
 
   // console.log(selectedDateCount);
   const [pendingAmount, setPendingAmount] = useState("");
@@ -719,21 +721,169 @@ const DailyReports = ({ mode }) => {
             </button>
           </motion.div>
 
+       
           <motion.div
             className="mt-3  grid grid-cols-2 w-[80vw] mx-auto"
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.5 }}
+
           >
-              <div className={`px-1 py-2 mr-2 rounded-lg ${
+            <div className={`px-1 py-2 mr-2 rounded-lg  ${
                     mode ? "bg-[#fff]" : "bg-[#303053]"
-                  } `}>
-              <HorizontalBarChartTOP top5={top} />
+                  }`}>
+                    <div className="flex justify-center">
+                      <div>
+                     <h5 className={`text-center pt-1 ${
+                    mode ? "text-[#000]" : "text-[#c2c2c2]"
+                  }`}>Top 5 Pending TPA</h5>
+                      </div>
+                 {showTableTop5 ? <div className={`text-white text-[15px] bg-gradient-to-r from-[#4747d7] to-[#00d7ff] py-[5px] px-4 rounded-[5px] transition duration-300 ease-in-out transform hover:scale-100 ml-2 hover:from-[#00d7ff] hover:to-[#4747d7]`} onClick={()=>setShowTableTop5(!showTableTop5)}>Show Chart</div>
+                  :<div className={`text-white text-[15px] bg-gradient-to-r from-[#4747d7] to-[#00d7ff] py-[5px] px-4 rounded-[5px] transition duration-300 ease-in-out transform hover:scale-100 ml-2 hover:from-[#00d7ff] hover:to-[#4747d7]`} onClick={()=>setShowTableTop5(!showTableTop5)}>Show Table</div>}
+                    </div>
+              {!showTableTop5 ? <HorizontalBarChartTOP top5={top} mode={mode} /> :
+              <motion.div className={`${
+                    mode ? "bg-[#fff]" : "bg-[#303053]"
+                  } mr-2 px-2 py-2  h-[35vh]`}  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 1.5 }}>
+           
+              <table className="w-full">
+              <thead className={`${mode ? "text-black" : "text-[#fff]"} sticky top-0`}>
+                <tr
+                  className={`text-[0.9rem] ${
+                    mode ? "bg-[#dee4ff]" : "bg-[#29295e]"
+                  } `}
+                >
+                    <th className="p-1 text-center">Sl No</th>
+                    <th className="p-1 text-center">Customer_Name</th>
+                    <th className="p-1 text-center">Count</th>
+                    <th className="p-1 text-center">Amount(₹)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {top?.map((tpa, index) => (
+                    <tr
+                      key={index}
+                      className={`text-center text-[0.8rem] ${ mode ?
+                        index % 2 !== 0 ? "bg-blue-100" : "bg-white" :  index % 2 !== 0 ? "bg-[#303053]" : "bg-[#303053]" 
+                      } ${mode ? "text-black" : "text-white"}`}
+                    >
+                      <td
+                        className={` border-x-0 py-1 ${
+                          mode ? "border-y-slate-300" : "border-gray-300"
+                        }`}
+                      >
+                        {index + 1}
+                      </td>
+                      <td
+                        className={` border-x-0 py-1 ${
+                          mode ? "border-y-slate-300" : "border-gray-300  "
+                        }`}
+                      >
+                        {tpa?.CustName?.length > 30
+                          ? tpa?.CustName.substring(0, 200) + "..."
+                          : tpa?.CustName}
+                      </td>
+                      <td
+                        className={` border-x-0 py-1 ${
+                          mode ? "border-y-slate-300" : "border-gray-300  "
+                        }`}
+                      >
+                        {tpa?.Count}
+                      </td>
+                      <td
+                        className={` border-x-0 py-1 ${
+                          mode ? "border-y-slate-300" : "border-gray-300"
+                        }`}
+                      >
+                        {Math.abs(tpa?.Amount)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </motion.div>}
             </div>
             <div className={`px-1 py-2 rounded-lg ${
                     mode ? "bg-[#fff]" : "bg-[#303053]"
                   }`}>
-              <HorizontalBarChartBottom bottom5={bottom} />
+                        <div className="flex justify-center">
+                      <div>
+                     <h5 className={`text-center pt-1 ${
+                    mode ? "text-[#000]" : "text-[#c2c2c2]"
+                  }`}>Bottom 5 Pending TPA</h5>
+                      </div>
+                 {showTableDataBottom5 ? <div className={`text-white text-[15px] bg-gradient-to-r from-[#4747d7] to-[#00d7ff] py-[5px] px-4 rounded-[5px] transition duration-300 ease-in-out transform hover:scale-100 ml-2 hover:from-[#00d7ff] hover:to-[#4747d7]`} onClick={()=>setShowTableDataBottom5(!showTableDataBottom5)}>Show Chart</div>
+                  :<div className={`text-white text-[15px] bg-gradient-to-r from-[#4747d7] to-[#00d7ff] py-[5px] px-4 rounded-[5px] transition duration-300 ease-in-out transform hover:scale-100 ml-2 hover:from-[#00d7ff] hover:to-[#4747d7]`} onClick={()=>setShowTableDataBottom5(!showTableDataBottom5)}>Show Table</div>}
+                    </div>
+                    {!showTableDataBottom5 ?
+
+              <HorizontalBarChartBottom bottom5={bottom} mode={mode}  />:  
+              <motion.div className={`${
+                mode ? "bg-[#fff]" : "bg-[#303053]"
+              } mr-2 px-2 py-2  h-[35vh]`} 
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1.5 }}>
+         
+          <table className="w-full">
+          <thead className={`${mode ? "text-black" : "text-[#fff]"} sticky top-0`}>
+            <tr
+              className={`text-[0.9rem] ${
+                mode ? "bg-[#dee4ff]" : "bg-[#29295e]"
+              } `}
+            >
+                <th className="p-1 text-center">Sl No</th>
+                <th className="p-1 text-center">Customer_Name</th>
+                <th className="p-1 text-center">Count</th>
+                <th className="p-1 text-center">Amount(₹)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {bottom?.map((tpa, index) => (
+                  <tr
+                  key={index}
+                  className={`text-center text-[0.8rem] ${ mode ?
+                    index % 2 !== 0 ? "bg-blue-100" : "bg-white" :  index % 2 !== 0 ? "bg-[#303053]" : "bg-[#303053]" 
+                  } ${mode ? "text-black" : "text-white"}`}
+                >
+                  <td
+                    className={` border-x-0 py-1 ${
+                      mode ? "border-y-slate-300" : "border-gray-300  "
+                    }`}
+                  >
+                    {index + 1}
+                  </td>
+                  <td
+                    className={` border-x-0 py-1 ${
+                      mode ? "border-y-slate-300" : "border-gray-300  "
+                    }`}
+                  >
+                    {tpa?.CustName?.length > 30
+                      ? tpa?.CustName.substring(0, 200) + "..."
+                      : tpa?.CustName}
+                  </td>
+                  <td
+                    className={` border-x-0 py-1 ${
+                      mode ? "border-y-slate-300" : "border-gray-300  "
+                    }`}
+                  >
+                    {tpa?.Count}
+                  </td>
+                  <td
+                    className={` border-x-0 py-1 ${
+                      mode ? "border-y-slate-300" : "border-gray-300  "
+                    }`}
+                  >
+                    {Math.abs(tpa?.Amount)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </motion.div>
+                    }
              
             </div>
           </motion.div>

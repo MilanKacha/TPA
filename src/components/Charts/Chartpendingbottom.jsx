@@ -21,7 +21,7 @@ ChartJS.register(
   ChartDataLabels
 );
 
-const HorizontalBarChartBottom = ({ bottom5 }) => {
+const HorizontalBarChartBottom = ({ bottom5,mode }) => {
   const chartRef = useRef(null);
 
   // Ensure bottom5 is not null before accessing its properties
@@ -65,7 +65,7 @@ const HorizontalBarChartBottom = ({ bottom5 }) => {
 
   return (
     <div className=" w-full">
-      <h5 className="text-black text-center pt-1">Bottom 5 Pending TPA</h5>
+  
       <Bar
         ref={chartRef}
         data={{

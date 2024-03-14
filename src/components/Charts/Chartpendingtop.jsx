@@ -64,7 +64,9 @@ const HorizontalBarChartTOP = ({ top5, mode }) => {
 
   return (
     <div className=" w-full">
-      <h5 className="text-black text-center pt-1">Top 5 Pending TPA</h5>
+      {/* <h5 className={`text-center pt-1 ${
+                    mode ? "text-[#000]" : "text-[#c2c2c2]"
+                  }`}>Top 5 Pending TPA</h5> */}
       <Bar
         ref={chartRef}
         data={{
